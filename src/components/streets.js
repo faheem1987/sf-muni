@@ -12,13 +12,11 @@ class Streets extends Component {
 				{streets.map((d, i) => {
 					return (
 						<path
-							key={`path-${i}`}
+							key={i}
 							className="street"
 							d={geoPath().projection(drawProjection(800, 450))(d)}
-							fill={`rgba(38,50,56,${1 / streets.length * i})`}
-							// fill={ interpolateSpectral(1 / this.state.geographyPaths.length * i) }
-							stroke={"rgb(102, 51, 153)"}
-							strokeWidth={0.5}
+							fill="rgba(0,0,0,0.1"
+							stroke="rgba(0,0,0,0.1"
 						/>
 					);
 				})}

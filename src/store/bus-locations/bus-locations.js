@@ -1,8 +1,9 @@
 import * as types from "./bus-locations.types";
-import { colors } from "../../utils";
 
 const initialState = {
-	busLocations: null
+	busLocations: null,
+	hoveredRoute: "",
+	busDetails: null
 };
 
 const addRouteHelper = (state, action) => {
@@ -13,18 +14,15 @@ const addRouteHelper = (state, action) => {
 			...state.busLocations,
 			vehicle: [...state.busLocations.vehicle, ...vehicle]
 		},
-		routesTagList: {
-			...state.routesTagList,
-			[tag]: {
-				tag,
-				color: colors[tag] || "#000"
-			}
+		routesTag: {
+			...state.routesTag,
+			[tag]: tag 
 		}
 	};
 };
 
 const deleteRouteHelper = (state, deleteByTag) => {
-	const clonedObj = Object.assign({}, state.routesTagList);
+	const clonedObj = Object.assign({}, state.routesTag);
 	delete clonedObj[deleteByTag];
 	return {
 		updatedRoutes: {
@@ -33,63 +31,56 @@ const deleteRouteHelper = (state, deleteByTag) => {
 				...state.busLocations.vehicle.filter(v => v.routeTag !== deleteByTag)
 			]
 		},
-		routesTagList: { ...clonedObj }
+		routesTag: { ...clonedObj }
 	};
 };
 
 const getRoutesTag = ({ vehicle }) => {
 	const tagProps = {};
-	vehicle.forEach(r => {
-		tagProps[r.routeTag] = {
-			tag: r.routeTag,
-			color: colors[r.routeTag] || "#000"
-		};
-	});
+	vehicle.forEach(r => tagProps[r.routeTag] = r.routeTag);
 	return tagProps;
 };
 
 export default (state = initialState, action = {}) => {
-	console.log('hello ', action);
 	switch (action.type) {
 	case types.BUSSES_SUCCESS: {
 		return {
 			...state,
 			busLocations: action.payload.data,
-			routesTagList: getRoutesTag(action.payload.data),
+			routesTag: getRoutesTag(action.payload.data),
 			predictedRoutes: getRoutesTag(action.payload.data)
 		};
 	}
 	case types.ADD_BUS_SUCCESS: {
-		const { updatedRoutes, routesTagList } = addRouteHelper(state, action);
+		const { updatedRoutes, routesTag } = addRouteHelper(state, action);
 		return {
 			...state,
 			busLocations: updatedRoutes,
-			routesTagList
+			routesTag
 		};
 	}
 	case types.DELETE_BUS: {
-		const { updatedRoutes, routesTagList } = deleteRouteHelper(
+		const { updatedRoutes, routesTag } = deleteRouteHelper(
 			state,
 			action.deleteByTag
 		);
 		return {
 			...state,
 			busLocations: updatedRoutes,
-			routesTagList
+			routesTag
 		};
 	}
-	case types.BUSSES_ON_HOVER:
-		return {
-			...state,
-			hoveredRoute: action.hoveredRoute
-		}
-	case types.DELETE_ALL_ROUTES: {
+	case types.DELETE_ALL_ROUTES:
 		return {
 			...state,
 			busLocations: {},
-			routesTagList: {}
-		}
-	}
+			routesTag: {}
+		};
+	case types.SHOW_BUS_DETAILS:
+		return {
+			...state,
+			busDetails: action.busDetails
+		};
 	default:
 		return {
 			...state

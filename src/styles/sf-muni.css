@@ -1,3 +1,20 @@
+.main-container {
+	overflow: hidden;
+}
+
 .sf-muni {
 	width: 100%;
+	min-height: 88vh;
+	height: 100%;
+}
+
+.map-info-container {
+	float: left;
+	width: calc(80% - 100px);
+	float: left;
+	padding: 10px 48px;
+}
+
+.bus-path {
+	cursor: pointer;
 }

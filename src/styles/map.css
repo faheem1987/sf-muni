@@ -1,10 +1,22 @@
 .map-container{
-	width: 70%;
-	float: right;
-	padding-top: 20px;
+	width: 80%;
+	float: left;
+	overflow: hidden;
 }
 
-.map {
-	width: 1024px;
-	height: 90vh;
+.bus-details {
+	width: calc(20% - 55px);
+	float: left;
+	padding: 10px 24px;
+	border-left: 1px solid rgba(0, 0, 0, 0.3);
+	line-height: 26px;
+	font-size: 18px;
+	border-radius: 5px;
+	box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.5);
+}
+
+.bus-details h4 {
+	margin: 0;
+	font-size: 14px;
+	font-weight: 400;
 }

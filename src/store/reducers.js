@@ -1,13 +1,15 @@
 import { combineReducers } from "redux";
 
-import streetsReducer from "../store/streets/streets";
-import routesReducer from "../store/routes/routes";
+import streets from "../store/streets/streets";
+import routes from "../store/routes/routes";
 import busLocations from "../store/bus-locations/bus-locations";
-import loaderReducer from "../store/loader/loader";
+import loader from "../store/loader/loader";
+import error from "../store/error/error";
 
 export default combineReducers({
-	streets: streetsReducer,
-	routes: routesReducer,
+	streets,
+	routes,
 	busLocations,
-	loader: loaderReducer
+	loader,
+	error
 });

@@ -1,7 +1,7 @@
-import { geoMercator } from "d3-geo";
+import { geoEquirectangular } from "d3-geo";
 
 export const drawProjection = (width = 800, height = 450) =>
-	geoMercator()
+	geoEquirectangular()
 		.center([-122.433701, 37.767683])
 		.scale(300000) //170000
 		.translate([width / 1.95, height / 1.65]);
@@ -9,12 +9,13 @@ export const drawProjection = (width = 800, height = 450) =>
 export const parsedData = vehicle => {
 	const parsedStopes = {
 		type: "Feature",
-		properties: { title: vehicle.title },
 		geometry: {
 			type: "Point",
 			coordinates: [vehicle.lon / 1, vehicle.lat / 1, 0]
 		},
-		routeTag: vehicle.routeTag
+		routeTag: vehicle.routeTag,
+		speed: vehicle.speedKmHr,
+		heading: vehicle.heading
 	};
 	return parsedStopes;
 };

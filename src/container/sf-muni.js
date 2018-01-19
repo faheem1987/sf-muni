@@ -1,23 +1,39 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import SFOStreetsMap from "../components/sfo-streets-map";
 import RouteLists from "../components/route-lists";
 import Loader from "../components/loader";
+import Streets from "../components/streets";
+import Vehicles from "../components/vehicles/vehicles";
+import BusDetails from "../components/vehicles/bus-details";
 
 import { getStreetsInfo } from "../store/streets/streets.action";
 import { getRoutesList } from "../store/routes/routes.action";
 import {
 	getBusses,
 	toggleBusRoute,
-	bussesOnHover,
-	deleteAllRoutes
+	showBusDetails
 } from "../store/bus-locations/bus-locations.action";
 
 import "../styles/sf-muni.css";
+import "../styles/error.css";
+import "../styles/header.css";
+import "../styles/footer.css";
+
+/*
+	<SfMuni>
+		<RouteLists />
+		<SFOStreetsMap>
+			<Vehicles />
+		</SFOStreetsMap>
+	</SfMuni>
+*/
 
 class SfMuni extends Component {
 	constructor(props) {
 		super(props);
+		this.state = { hoveredTag: "" };
 		this._onHandletoggleAllRoutes = this._onHandletoggleAllRoutes.bind(this);
 	}
 
@@ -33,8 +49,8 @@ class SfMuni extends Component {
 	}
 
 	_onHandletoggleAllRoutes() {
-		const {routesTagList} = this.props;
-		if(Object.keys(routesTagList).length) {
+		const {routesTag} = this.props;
+		if(Object.keys(routesTag).length) {
 			this.props.deleteAllRoutes();
 		} else {
 			this.props.getBusses();
@@ -48,52 +64,84 @@ class SfMuni extends Component {
 			streets,
 			busLocations,
 			routesList,
-			routesTagList,
+			routesTag,
 			predictedRoutes,
 			isPageLoading,
-			bussesOnHover,
-			hoveredRoute,
-			deleteRoutes,
-			deleteAllRoutes
+			busDetails,
+			showBusDetails,
+			error
 		} = this.props;
-		return (
+		return [
 			<div className="sf-muni">
-				{isPageLoading ? (
-					<Loader />
-				) : (
-					[
+				{ isPageLoading && <Loader /> }
+
+				<header className="header">
+						ThousandEyes
+				</header>
+
+				{error && <div className="error-alert">{error}</div>}
+
+				{!isPageLoading && !error &&
+					<section className="main-container">
 						<RouteLists
+							key="route_list"
 							routesList={routesList}
 							getBusses={getBusses}
 							toggleBusRoute={toggleBusRoute}
-							routesTagList={routesTagList}
+							routesTag={routesTag}
 							predictedRoutes={predictedRoutes}
-							bussesOnHover={bussesOnHover}
 							handletoggleAllRoutes={this._onHandletoggleAllRoutes}
-						/>,
-						<SFOStreetsMap
-							streets={streets}
-							busLocations={busLocations}
-							getBusses={getBusses}
-							routesTagList={routesTagList}
-							hoveredRoute={hoveredRoute}
 						/>
-					]
-				)}
-			</div>
-		);
+
+						<section className="map-info-container">
+							<SFOStreetsMap key="sf_map">
+								<Streets streets={streets} />
+								{busLocations &&
+									busLocations.vehicle && (
+										<g>
+											<Vehicles
+												vehicles={busLocations.vehicle}
+												getBusses={getBusses}
+												routesTag={routesTag}
+												showBusDetails={showBusDetails}
+											/>
+										</g>
+									)}
+							</SFOStreetsMap>
+
+							<BusDetails 
+								busDetails={busDetails}
+								routesTag={routesTag} />
+						</section>
+					</section>
+				} 
+			</div>,
+			<footer className="footer">
+				© 2018, project given by ThousandEyes, Inc. All rights reserved.
+			</footer>
+		];
 	}
 }
+
+SfMuni.propTypes = {
+	getStreetsInfo: PropTypes.func,
+	getBusses: PropTypes.func,
+	getRoutesList: PropTypes.func,
+	isPageLoading: PropTypes.bool,
+	routesTag: PropTypes.object,
+	busDetails: PropTypes.object
+};
 
 export default connect(
 	state => ({
 		streets: state.streets.streets,
 		busLocations: state.busLocations.busLocations,
-		routesTagList: state.busLocations.routesTagList,
+		routesTag: state.busLocations.routesTag,
 		predictedRoutes: state.busLocations.predictedRoutes,
+		busDetails: state.busLocations.busDetails,
 		routesList: state.routes.routesList,
 		isPageLoading: state.loader.isLoading,
-		hoveredRoute: state.busLocations.hoveredRoute
+		error: state.error.error
 		
 	}),
 	{
@@ -101,7 +149,6 @@ export default connect(
 		getBusses,
 		getRoutesList,
 		toggleBusRoute,
-		bussesOnHover,
-		deleteAllRoutes
+		showBusDetails
 	}
 )(SfMuni);

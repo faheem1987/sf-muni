@@ -11,6 +11,7 @@ export const getStreetsInfo = () => dispatch => {
 			return dispatch({ type: types.STREETS_INFO_SUCCESS, payload: res });
 		})
 		.catch(e => {
-			return dispatch({ type: types.STREETS_INFO_FAILURE, error: e });
+			dispatch(loader(false));
+			return dispatch({ type: "HAS_ERROR", error: e });
 		});
 };

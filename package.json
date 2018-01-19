@@ -14,8 +14,6 @@
   "private": false,
   "dependencies": {
     "axios": "^0.17.1",
-    "d3-scale-chromatic": "^1.1.1",
-    "randomcolor": "^0.5.3",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-redux": "^5.0.6",

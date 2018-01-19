@@ -1,0 +1,9 @@
+.error-alert {
+	font-size: 18px;
+	text-align: center;
+	padding: 20px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	height: 80vh;
+}

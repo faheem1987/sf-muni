@@ -1,33 +1,20 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-import Streets from "./streets";
-import Vehicles from "./vehicles/vehicles";
-
 import "../styles/map.css";
 
-const SFOStreetsMap = ({
-	streets,
-	busLocations,
-	getBusses,
-	routesTagList,
-	hoveredRoute
-}) => {
+/*
+	<SFOStreetsMap>
+		<Vehicles />
+	</SFOStreetsMap>
+*/
+
+const SFOStreetsMap = ({children}) => {
+	
 	return (
 		<div className="map-container">
 			<svg className="map" width={800} height={600}>
-				<Streets streets={streets} />
-				{busLocations &&
-					busLocations.vehicle && (
-						<g>
-							<Vehicles
-								vehicles={busLocations.vehicle}
-								getBusses={getBusses}
-								routesTagList={routesTagList}
-								hoveredRoute={hoveredRoute}
-							/>
-						</g>
-					)}
+				{children}
 			</svg>
 		</div>
 	);

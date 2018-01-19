@@ -5,9 +5,11 @@
 .route-lists {
 	width: 20%;
 	float: left;
-	height: 90vh;
+	height: calc(100vh - 155px);
 	overflow: scroll;
-	border-right: 1px solid rgba(0,0,0,0.3);
+	border: 1px solid rgba(0,0,0,0.3);
+	border-width: 0 1px 1px 0;
+	margin-bottom: 12px;
 }
 
 .route-name {
@@ -16,6 +18,11 @@
 	line-height: 2;
 	font-size: 18px;
 	cursor: pointer;
+	padding: 5px 0
+}
+
+.route-name:hover:not(.disable	) {
+	background: rgb(233, 227, 227);
 }
 
 .disable {
@@ -28,10 +35,6 @@
 	cursor: pointer;
 	margin-right: 10px;
 }
-
-/* .route-name input:checked ~ .checkmark {
-	background-color: #2196F3;
-} */
 
 .checkmark {
 	position: absolute;

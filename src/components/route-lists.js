@@ -1,13 +1,14 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 
+import { colors } from "../utils";
 import "../styles/route-lists.css";
 
-export class RoutesInfo extends Component {
+export class RoutesList extends Component {
 	constructor(props) {
 		super(props);
-		this._onhandleMouse = this._onhandleMouse.bind(this);
 		this._toggleAllRoutes = this._toggleAllRoutes.bind(this);
+		this._toggleBusRoute = this._toggleBusRoute.bind(this);
 	}
 
 	_toggleBusRoute(routeTag, bool) {
@@ -15,38 +16,27 @@ export class RoutesInfo extends Component {
 		this.props.toggleBusRoute(routeTag, bool);
 	}
 
-	_onhandleMouse(tag=null) {
-		this.props.bussesOnHover(tag)
-	}
-
 	_renderRouteLists() {
-		const { routesList, routesTagList, predictedRoutes } = this.props;
+		const { routesList, routesTag, predictedRoutes } = this.props;
 		return routesList.route.map((route, i) => {
-			const isChecked = !!routesTagList[route.tag];
+			const isChecked = !!routesTag[route.tag];
 			const isPredicted = predictedRoutes[route.tag];
-			const checkedBoxProperties = {
-				isChecked,
-				color: routesTagList[route.tag]
-					? routesTagList[route.tag].color
-					: "#fff"
-			};
 			return (
 				<label
+					key={i}
 					className={isPredicted ? "route-name" : "route-name disable"}
-					for={route.tag}
-					onMouseEnter={() => this._onhandleMouse(route.tag)}
-					onMouseLeave={() => this._onhandleMouse()}
+					htmlFor={route.tag}
 				>
 					<input
 						type="checkbox"
 						value={route.title}
 						id={route.tag}
-						checked={checkedBoxProperties.isChecked}
-						onChange={() => this._toggleBusRoute(route.tag, !isChecked)}
+						checked={isChecked}
+						onChange={this._toggleBusRoute.bind(this, route.tag, !isChecked)}
 						disabled={!isPredicted}
 					/>
 					<span
-						style={{ backgroundColor: checkedBoxProperties.color }}
+						style={{ backgroundColor: isChecked ? colors[routesTag[route.tag]] || "#2ecc71" : "#fff"}}
 						className="checkmark"
 					/>
 					{route.title}
@@ -56,31 +46,35 @@ export class RoutesInfo extends Component {
 	}
 
 	_toggleAllRoutes() {
-			this.props.handletoggleAllRoutes();
+		this.props.handletoggleAllRoutes();
 	}
 
 	render() {
 		return (
-			<div className="route-lists">
+			<nav className="route-lists">
 				{this.props.routesList && [
-					<h2>San Francisco Bus Routes </h2>,
-					<h4 className="sub-header"> Select any route to see the bus details</h4>,
-					<button className="toggle-list" 
+					<h2 key="header" >San Francisco Bus Routes </h2>,
+					<h4 key="sub_header" className="sub-header"> 
+						Select any route to see the bus details
+					</h4>,
+					<button key="toggle_list" className="toggle-list" 
 						onClick={this._toggleAllRoutes}>
 						Toggle routes
 					</button>,
 					this._renderRouteLists()
 				]}
-			</div>
+			</nav>
 		);
 	}
 }
 
-Map.propTypes = {
+RoutesList.propTypes = {
 	routesList: PropTypes.shape({
 		route: PropTypes.array
 	}),
+	routesTag: PropTypes.object,
+	predictedRoutes: PropTypes.object,
 	toggleBusRoute: PropTypes.func
 };
 
-export default RoutesInfo;
+export default RoutesList;

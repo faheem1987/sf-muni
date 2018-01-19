@@ -1,6 +1,8 @@
 import * as types from "./routes.types";
 import axios from "axios";
 
+import { loader } from "../loader/loader.action";
+
 const BASE_ROUTES_URL = "http://webservices.nextbus.com/service/publicJSONFeed";
 
 export const getRoutesList = () => dispatch => {
@@ -13,7 +15,8 @@ export const getRoutesList = () => dispatch => {
 				payload: response
 			});
 		})
-		.catch(error =>
-			dispatch({ type: types.ROUTES_LIST_FAILURE, error: error })
-		);
+		.catch(e => {
+			dispatch(loader(false));
+			return dispatch({ type: "HAS_ERROR", error: e });
+		});
 };

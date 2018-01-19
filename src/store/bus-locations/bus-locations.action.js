@@ -24,7 +24,8 @@ export const getBusses = () => dispatch => {
 		})
 		.then(() => dispatch(loader(false)))
 		.catch(e => {
-			dispatch({ type: types.BUSSES_FAILURE, error: e });
+			dispatch(loader(false));
+			dispatch({ type: "HAS_ERROR", error: e });
 		});
 };
 
@@ -39,7 +40,8 @@ export const addBusRoute = location => dispatch => {
 			});
 		})
 		.catch(e => {
-			dispatch({ type: types.BUSSES_FAILURE, error: e });
+			dispatch(loader(false));
+			dispatch({ type: "HAS_ERROR", error: e });
 		});
 };
 
@@ -55,16 +57,15 @@ export const toggleBusRoute = (routeTag, bool) => dispatch => {
 	});
 };
 
-export const bussesOnHover = (tag) => {
-	return {
-		type: types.BUSSES_ON_HOVER,
-		hoveredRoute: tag
-	}
-}
-
 export const deleteAllRoutes = () => {
-	console.log('action');
 	return {
 		type: types.DELETE_ALL_ROUTES
-	}
-}
+	};
+};
+
+export const showBusDetails = (route) => {
+	return {
+		type: types.SHOW_BUS_DETAILS,
+		busDetails: route
+	};
+};

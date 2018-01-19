@@ -3,7 +3,7 @@ var path = require("path");
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const dependencies = [
-	"react","react-dom","redux", "react-redux","redux-thunk","axios", "d3-scale-chromatic", "d3-geo"
+	"react","react-dom","redux", "react-redux","redux-thunk","axios", "d3-geo"
 ]
 
 module.exports = {
