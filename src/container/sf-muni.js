@@ -13,7 +13,8 @@ import { getRoutesList } from "../store/routes/routes.action";
 import {
 	getBusses,
 	toggleBusRoute,
-	showBusDetails
+	showBusDetails,
+	deleteAllRoutes
 } from "../store/bus-locations/bus-locations.action";
 
 import "../styles/sf-muni.css";
@@ -149,6 +150,7 @@ export default connect(
 		getBusses,
 		getRoutesList,
 		toggleBusRoute,
-		showBusDetails
+		showBusDetails,
+		deleteAllRoutes
 	}
 )(SfMuni);
